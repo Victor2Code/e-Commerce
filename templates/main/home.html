@@ -9,4 +9,36 @@
 {% block ext_js %}
     {{ block.super }}
     <script type="text/javascript" src="{% static 'js/swiper.jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ecomm/main/js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="home">
+        {# 首页顶部轮播 #}
+        <div class="swiper-container" id="topSwiper">
+            <div class="swiper-wrapper">
+                {% for swiper_img in swiper_imgs %}
+                    <div class="swiper-slide">
+                        <img src="{{ swiper_img.img }}" alt="{{ swiper_img.name }}">
+                    </div>
+                {% endfor %}
+
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        {# 首页顶部导航 #}
+        <div class="topMenu">
+            <nav>
+                <ul>
+                    {% for main_nav in nav_imgs %}
+                        <li>
+                            <img src="{{ main_nav.img }}" alt="{{ main_nav.name }}">
+                            <span>{{ main_nav.name }}</span>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </nav>
+        </div>
+    </div>
 {% endblock %}
