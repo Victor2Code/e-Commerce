@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block ext_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'ecomm/main/css/main.css' %}">
+{% endblock %}
+
+{% block header %}
+    <header></header>
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <a href="{% url 'shop:home' %}" class="home">
+            <dl>
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>首页</dd>
+            </dl>
+        </a>
+        <a href="{% url 'shop:market' %}" class="market">
+            <dl>
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>商城</dd>
+            </dl>
+        </a>
+        <a href="{% url 'shop:cart' %}" class="cart">
+            <dl>
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>购物车</dd>
+            </dl>
+        </a>
+        <a href="{% url 'shop:mine' %}" class="mine">
+            <dl>
+                <dt>
+                    <span></span>
+                </dt>
+                <dd>我的</dd>
+            </dl>
+        </a>
+    </footer>
+{% endblock %}
