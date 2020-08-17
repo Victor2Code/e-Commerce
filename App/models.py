@@ -22,3 +22,7 @@ class MainSwiper(Main):
 class MainNav(Main):
     class Meta:
         db_table = 'MainNav'
+
+class MainMustBuy(Main):
+    class Meta:
+        db_table = 'MainMustBuy'

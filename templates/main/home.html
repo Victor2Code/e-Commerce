@@ -40,5 +40,15 @@
                 </ul>
             </nav>
         </div>
+        {# 首页必购 #}
+        <div class="swiper-container" id="swiperMenu">
+            <ul class="swiper-wrapper">
+                {% for mustbuy_img in mustbuy_imgs %}
+                    <li class="swiper-slide">
+                        <img src="{{ mustbuy_img.img }}" alt="{{ mustbuy_img.name }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}

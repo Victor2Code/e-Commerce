@@ -1,0 +1,3 @@
+insert into MainSwiper(img, name, trackid) VALUES ('/static/ecomm/main/img/slide.jpg','slide01',1),('/static/ecomm/main/img/slide02.jpg','slide02',2),('/static/ecomm/main/img/slide03.jpg','slide03',3),('/static/ecomm/main/img/slide04.jpg','slide04',4);
+
+insert into MainNav(img, name, trackid) VALUES ('/static/ecomm/main/img/goods001.jpg','导航1',5),('/static/ecomm/main/img/goods002.jpg','导航2',6),('/static/ecomm/main/img/goods003.jpg','导航3',7),('/static/ecomm/main/img/goods004.jpg','导航4',8);

@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*- 
 # @author: xiaofu
 # @date: 2020-Aug-16
-from django.urls import path
+from django.urls import path, include
 
 from App import views
+from Shop import settings
 
 urlpatterns = [
     path('home/', views.home, name='home'),
@@ -13,3 +14,5 @@ urlpatterns = [
     path('mine/', views.mine, name='mine'),
     # path('test/', views.test, name='test'),
 ]
+
+

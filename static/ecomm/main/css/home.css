@@ -44,7 +44,8 @@ footer .home dd {
 
 /* 顶部导航 */
 .topMenu {
-    padding-bottom: 0.26rem;
+    /*padding-bottom: 0.26rem;*/
+    padding-bottom: 0;
 }
 
 .topMenu nav {

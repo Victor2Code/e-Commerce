@@ -11,15 +11,17 @@ from django.shortcuts import render
 #         'img': img
 #     }
 #     return render(request, 'test.html', context=context)
-from App.models import MainSwiper, MainNav
+from App.models import MainSwiper, MainNav, MainMustBuy
 
 
 def home(request):
     swiper_imgs = MainSwiper.objects.all()
     nav_imgs = MainNav.objects.all()
+    mustbuy_imgs = MainMustBuy.objects.all()
     context = {
         'swiper_imgs': swiper_imgs,
         'nav_imgs': nav_imgs,
+        'mustbuy_imgs': mustbuy_imgs,
     }
     return render(request, 'main/home.html', context=context)
 
