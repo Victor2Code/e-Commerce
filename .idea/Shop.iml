@@ -19,6 +19,11 @@
     <orderEntry type="module" module-name="JS" />
     <orderEntry type="module" module-name="ITcast" />
     <orderEntry type="module" module-name="Tencent" />
+    <orderEntry type="module" module-name="Shopee" />
+    <orderEntry type="module" module-name="Facebook" />
+    <orderEntry type="module" module-name="JD" />
+    <orderEntry type="module" module-name="webcrawler" />
+    <orderEntry type="module" module-name="KMP" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

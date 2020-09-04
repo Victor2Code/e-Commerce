@@ -11,7 +11,7 @@ from django.shortcuts import render
 #         'img': img
 #     }
 #     return render(request, 'test.html', context=context)
-from App.models import MainSwiper, MainNav, MainMustBuy
+from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods
 
 
 def home(request):
@@ -19,6 +19,7 @@ def home(request):
     nav_imgs = MainNav.objects.all()
     mustbuy_imgs = MainMustBuy.objects.all()
     context = {
+        'title': '首页',
         'swiper_imgs': swiper_imgs,
         'nav_imgs': nav_imgs,
         'mustbuy_imgs': mustbuy_imgs,
@@ -27,7 +28,16 @@ def home(request):
 
 
 def market(request):
-    return render(request, 'main/market.html')
+    catid = request.GET.get('catid', 1)
+    goodtypes = GoodType.objects.all()
+    goods_list = Goods.objects.filter(categoryid=catid)
+    context = {
+        'title': '商城',
+        'catid': int(catid),
+        'goodtypes': goodtypes,
+        'goods_list': goods_list,
+    }
+    return render(request, 'main/market.html', context=context)
 
 
 def cart(request):

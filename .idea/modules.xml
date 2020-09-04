@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/ScrapyProjects/Facebook/.idea/Facebook.iml" filepath="$USER_HOME$/ScrapyProjects/Facebook/.idea/Facebook.iml" />
       <module fileurl="file://$USER_HOME$/ScrapyProjects/ITcast/.idea/ITcast.iml" filepath="$USER_HOME$/ScrapyProjects/ITcast/.idea/ITcast.iml" />
+      <module fileurl="file://$USER_HOME$/ScrapyProjects/JD/.idea/JD.iml" filepath="$USER_HOME$/ScrapyProjects/JD/.idea/JD.iml" />
       <module fileurl="file://$PROJECT_DIR$/../JS/.idea/JS.iml" filepath="$PROJECT_DIR$/../JS/.idea/JS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../KMP/.idea/KMP.iml" filepath="$PROJECT_DIR$/../KMP/.idea/KMP.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Shop.iml" filepath="$PROJECT_DIR$/.idea/Shop.iml" />
+      <module fileurl="file://$USER_HOME$/ScrapyProjects/Shopee/.idea/Shopee.iml" filepath="$USER_HOME$/ScrapyProjects/Shopee/.idea/Shopee.iml" />
       <module fileurl="file://$USER_HOME$/ScrapyProjects/Tencent/.idea/Tencent.iml" filepath="$USER_HOME$/ScrapyProjects/Tencent/.idea/Tencent.iml" />
+      <module fileurl="file://C:/Yoozoo/Projects/AI/varys/webcrawler/.idea/webcrawler.iml" filepath="C:/Yoozoo/Projects/AI/varys/webcrawler/.idea/webcrawler.iml" />
     </modules>
   </component>
 </project>
