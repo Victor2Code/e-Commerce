@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from Shop import password
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -80,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ecomm',
         'USER': 'root',
-        'PASSWORD': '#C62g7yb',
+        'PASSWORD': password.MYSQL_PASSWORD,
         "HOST": '10.18.99.66',
         'PORT': 3306,
     }
