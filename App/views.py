@@ -29,13 +29,26 @@ def home(request):
 
 def market(request):
     catid = request.GET.get('catid', 1)
+    childclass = request.GET.get('childclass', '0')
     goodtypes = GoodType.objects.all()
-    goods_list = Goods.objects.filter(categoryid=catid)
+    # filter永远返回一个QuerySet，需要索引获取单条记录
+    # subclass_str = GoodType.objects.filter(typeid=catid)[0].childtypenames
+    # get返回单条记录
+    subclass_str = GoodType.objects.get(typeid=catid).childtypenames
+    # print(subclass_str)
+    subclass_list = [item.split(':') for item in subclass_str.split('#')]
+    # print(subclass_list)
+    if int(childclass) == 0:
+        goods_list = Goods.objects.filter(categoryid=catid)
+    else:
+        goods_list = Goods.objects.filter(categoryid=catid).filter(childcid=childclass)
     context = {
         'title': '商城',
         'catid': int(catid),
         'goodtypes': goodtypes,
         'goods_list': goods_list,
+        'subclass_list': subclass_list,
+        'childcid': childclass,
     }
     return render(request, 'main/market.html', context=context)
 
