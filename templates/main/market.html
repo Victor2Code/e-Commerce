@@ -81,12 +81,17 @@
                 </div>
                 <div id="sort_methods_container">
                     <div>
-                        <a href="#">
-                            <button>综合排序</button>
+                        {% for rule in rules %}
+                            {% ifequal rule.1 sortrule %}
+                                <a href="{% url 'shop:market' %}?catid={{ catid }}&childclass={{ childcid }}&sortrule={{ rule.1 }}">
+                            <button class="btn btn-success">{{ rule.0 }}</button>
                         </a>
-                        <a href="#">
-                            <button>xxxx</button>
+                            {% else %}
+                            <a href="{% url 'shop:market' %}?catid={{ catid }}&childclass={{ childcid }}&sortrule={{ rule.1 }}">
+                            <button class="btn btn-default">{{ rule.0 }}</button>
                         </a>
+                            {% endifequal %}
+                        {% endfor %}
                     </div>
                 </div>
             </menu>
