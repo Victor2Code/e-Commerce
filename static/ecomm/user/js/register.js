@@ -1,4 +1,5 @@
 $(function () {
+    //用户名校验
     $('#username').change(function () {
         let username = $(this).val().trim();
         if (username.length) {
@@ -15,6 +16,7 @@ $(function () {
 
         };
     });
+
 // 密码一致性校验
     $('#password_check').change(function(){
         let password1 = $('#password').val().trim();
@@ -45,6 +47,7 @@ $('#email').change(function(){
 
 }); //不加分号下方的函数无法被识别
 
+// 提交表单的时候检测3个span是否为红色
 function check(){
     let username_alert=$('#username_alert').css('color');
     let email_alert = $('#email_alert').css('color');

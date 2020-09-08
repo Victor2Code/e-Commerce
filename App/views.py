@@ -16,6 +16,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User
+from App.tools import my_password_generator
 
 
 def home(request):
@@ -109,7 +110,8 @@ def register(request):
     elif request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
-        password = request.POST.get('password')
+        # password = request.POST.get('password')
+        password=my_password_generator(request.POST.get('password'))
         icon = request.FILES.get('icon')
 
         user = User()
