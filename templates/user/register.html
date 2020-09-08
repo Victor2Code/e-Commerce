@@ -8,7 +8,7 @@
 
 {% block content %}
     <div id="register_container">
-        <form method="post" enctype="multipart/form-data" action="{% url 'shop:register' %}">
+        <form method="post" enctype="multipart/form-data" action="{% url 'shop:register' %}" onsubmit="return check()">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">用户名</label>

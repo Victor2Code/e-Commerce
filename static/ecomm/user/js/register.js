@@ -17,8 +17,8 @@ $(function () {
     });
 // 密码一致性校验
     $('#password_check').change(function(){
-        password1 = $('#password').val().trim();
-        password2 = $(this).val().trim();
+        let password1 = $('#password').val().trim();
+        let password2 = $(this).val().trim();
         if (password1==password2){
             $('#password_check_alert').addClass('glyphicon glyphicon-ok').removeClass('glyphicon-remove').css('color','green').html('密码一致')
         }else{
@@ -41,4 +41,20 @@ $('#email').change(function(){
     };
 });
 
-})
+
+
+}); //不加分号下方的函数无法被识别
+
+function check(){
+    let username_alert=$('#username_alert').css('color');
+    let email_alert = $('#email_alert').css('color');
+    let password_check_alert = $('#password_check_alert').css('color');
+    console.log(username_alert);
+    console.log(username_alert=='rgb(255, 0, 0)') //中间有空格，最好是复制console中打印的内容
+    if (username_alert == 'rgb(255, 0, 0)' || email_alert == 'rgb(255, 0, 0)' || password_check_alert =='rgb(255, 0, 0)'){
+        alert('请检查标红的输入');
+        return false;
+    }else {
+        return true;
+    }
+}
