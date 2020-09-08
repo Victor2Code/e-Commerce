@@ -127,7 +127,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'/static/uploads')
+# 用于数据库中的ImageField
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/uploads')
 
 INTERNAL_IPS = [
     '127.0.0.1',

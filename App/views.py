@@ -1,6 +1,6 @@
 import random
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -13,7 +13,9 @@ from django.shortcuts import render
 #         'img': img
 #     }
 #     return render(request, 'test.html', context=context)
-from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods
+from django.urls import reverse
+
+from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User
 
 
 def home(request):
@@ -96,3 +98,70 @@ def test(request):
         good.marketprice = good.price + 2
         good.save()
     return HttpResponse('Ok!')
+
+
+def register(request):
+    if request.method == 'GET':
+        context = {
+            'title': '注册',
+        }
+        return render(request, 'user/register.html', context=context)
+    elif request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        icon = request.FILES.get('icon')
+
+        user = User()
+        user.username = username
+        user.email = email
+        user.password = password
+        user.icon = icon
+
+        user.save()
+
+        return HttpResponseRedirect(reverse('shop:login'))
+
+
+def login(request):
+    if request.method == 'GET':
+        context = {
+            'title': '登录',
+        }
+        return render(request, 'user/login.html', context=context)
+    elif request.method == 'POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        return HttpResponse('登陆成功！')
+
+
+def checkuser(request):
+    username = request.GET.get('username')
+    users = User.objects.filter(username=username)
+    if users.exists():
+        data = {
+            'status':900,
+            'message':'用户名已被占用'
+        }
+    else:
+        data={
+            'status':901,
+            'message':'用户名可用'
+        }
+    return JsonResponse(data=data)
+
+
+def checkemail(request):
+    email = request.GET.get('email')
+    users = User.objects.filter(email=email)
+    if users.exists():
+        data = {
+            'status':900,
+            'message':'邮箱已被占用'
+        }
+    else:
+        data={
+            'status':901,
+            'message':'邮箱可用'
+        }
+    return JsonResponse(data=data)
