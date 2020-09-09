@@ -130,6 +130,9 @@ STATICFILES_DIRS = [
 # 用于数据库中的ImageField
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/uploads')
 
+# 用于生成完整的图片url
+MEDIA_ROOT_PREFIX = '/static/uploads/'
+
 INTERNAL_IPS = [
     '127.0.0.1',
     'localhost',

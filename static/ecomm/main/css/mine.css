@@ -1,3 +1,4 @@
+/* 底部图标和颜色 */
 footer .mine span {
     background: url(/static/img/mine_selected.png) no-repeat;
     background-size: 0.513889rem;
@@ -5,4 +6,174 @@ footer .mine span {
 
 footer .mine dd {
     color: orange;
+}
+
+#mine {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: +10;
+    background: whitesmoke;
+    overflow: hidden;
+    padding-top: 4rem;
+    padding-bottom: 1.5rem;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 4rem;
+    background: pink;
+    padding-top: 0.5rem;
+}
+
+.fixed > span {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    float: left;
+    margin: 0 0.3rem 0;
+    font-size: 1.5rem;
+    color: black;
+    background: white;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 1.8rem;
+}
+
+/* 头像的图片*/
+.fixed > span > .icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+
+.fixed p {
+    margin-bottom: 0.5rem;
+    font-size: 0.5rem;
+    color: white;
+}
+
+.fixed p span:first-child {
+    color: black;
+}
+
+.fixed p span:last-child {
+    color: red;
+    display: inline-block;
+    text-indent: 0.3rem;
+}
+
+/* 注册按钮 */
+#regis {
+    position: absolute;
+    right: 0.3rem;
+    top: 1.3rem;
+    color: white;
+    font-size: 1rem;
+}
+
+.fixed p:last-child {
+    background: #f0e000;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    margin-bottom: 0;
+    font-size: 0.4rem;
+    line-height: 0.5rem;
+    height: 1rem;
+}
+
+.fixed p:last-child span {
+    margin: 0.2rem 0;
+}
+
+.fixed p:last-child span:first-child {
+    color: red;
+}
+
+.fixed p:last-child span:last-child {
+    color: white;
+}
+
+/* 各种服务的接口 */
+.service {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding-bottom: 1.5rem;
+    font-size: 0.4rem;
+}
+
+.service p {
+    line-height: 1.5rem;
+    padding: 0 0.3rem;
+    background: white;
+    border-bottom: 0.04rem solid lightyellow;
+}
+
+.service p a {
+    color: grey;
+    float: right;
+}
+
+.service #nav, .service menu {
+    padding: 0.5rem 0 0.3rem;
+    margin-bottom: 0.4rem;
+    background: white;
+}
+
+.service #nav ul, .service menu ul {
+    display: flex;
+    justify-content: space-around;
+}
+
+.service #nav ul li, .service menu ul li {
+    position: relative;
+}
+
+.service #nav ul li dl, .service menu ul li dl {
+    text-align: center;
+}
+
+.service #nav ul li > span {
+    position: absolute;
+    right: 0;
+    color: whitesmoke;
+    background-color: red;
+}
+
+.service #nav ul li dl dt, .service menu ul li dl dt {
+    width: 100%;
+    line-height: 1rem;
+}
+
+.service #nav ul li dl dt span, .service menu ul li dl dt span {
+    font-size: 0.5rem;
+}
+
+.service menu ul {
+    flex-wrap: wrap;
+}
+
+.service menu ul li {
+    width: 25%;
+}
+
+.service menu ul li:last-child {
+    width: 100%;
+}
+
+.service menu ul li:last-child dl {
+    width: 25%;
+}
+
+.service p:last-child > a {
+    line-height: 1.5rem;
+    text-align: center;
+    width: 100%;
+    display: block;
+    float: none;
 }

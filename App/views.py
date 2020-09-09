@@ -1,5 +1,6 @@
 import random
 
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
@@ -16,7 +17,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User
-from App.tools import my_password_generator
+from App.tools import my_password_generator, my_password_checker
+from Shop.settings import MEDIA_ROOT_PREFIX
 
 
 def home(request):
@@ -86,7 +88,17 @@ def cart(request):
 
 
 def mine(request):
-    return render(request, 'main/mine.html')
+    username = request.session.get('username')
+    context = {
+        'title': '我的',
+        'is_login': False,
+    }
+    if username:
+        user = User.objects.get(Q(username=username)|Q(email=username))
+        context['is_login'] = True
+        context['username'] = user.username
+        context['icon'] = MEDIA_ROOT_PREFIX + user.icon.url #记住将ImageField对象转为url
+    return render(request, 'main/mine.html', context=context)
 
 
 def test(request):
@@ -111,7 +123,7 @@ def register(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         # password = request.POST.get('password')
-        password=my_password_generator(request.POST.get('password'))
+        password = my_password_generator(request.POST.get('password'))
         icon = request.FILES.get('icon')
 
         user = User()
@@ -132,9 +144,20 @@ def login(request):
         }
         return render(request, 'user/login.html', context=context)
     elif request.method == 'POST':
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        return HttpResponse('登陆成功！')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        users = User.objects.filter(Q(username=username) | Q(email=username))
+        if users.exists():
+            user = users.first()
+            if my_password_checker(password, user.password):
+                request.session['username'] = username
+                return HttpResponseRedirect(reverse('shop:mine'))
+            else:
+                print('密码错误')
+                return HttpResponseRedirect(reverse('shop:login'))
+        else:
+            print('没找到这个用户')
+            return HttpResponseRedirect(reverse('shop:login'))
 
 
 def checkuser(request):
@@ -142,13 +165,13 @@ def checkuser(request):
     users = User.objects.filter(username=username)
     if users.exists():
         data = {
-            'status':900,
-            'message':'用户名已被占用'
+            'status': 900,
+            'message': '用户名已被占用'
         }
     else:
-        data={
-            'status':901,
-            'message':'用户名可用'
+        data = {
+            'status': 901,
+            'message': '用户名可用'
         }
     return JsonResponse(data=data)
 
@@ -158,12 +181,17 @@ def checkemail(request):
     users = User.objects.filter(email=email)
     if users.exists():
         data = {
-            'status':900,
-            'message':'邮箱已被占用'
+            'status': 900,
+            'message': '邮箱已被占用'
         }
     else:
-        data={
-            'status':901,
-            'message':'邮箱可用'
+        data = {
+            'status': 901,
+            'message': '邮箱可用'
         }
     return JsonResponse(data=data)
+
+
+def logout(request):
+    request.session.flush()
+    return HttpResponseRedirect(reverse('shop:mine'))
