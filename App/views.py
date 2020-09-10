@@ -1,8 +1,11 @@
 import random
+import uuid
 
+from django.core.cache import cache, caches
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from multiprocessing import Process
 
 # Create your views here.
 # from App.models import Test
@@ -17,7 +20,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User
-from App.tools import my_password_generator, my_password_checker
+from App.tools import my_password_generator, my_password_checker, send_verification_email
 from Shop.settings import MEDIA_ROOT_PREFIX
 
 
@@ -94,10 +97,10 @@ def mine(request):
         'is_login': False,
     }
     if username:
-        user = User.objects.get(Q(username=username)|Q(email=username))
+        user = User.objects.get(Q(username=username) | Q(email=username))
         context['is_login'] = True
         context['username'] = user.username
-        context['icon'] = MEDIA_ROOT_PREFIX + user.icon.url #记住将ImageField对象转为url
+        context['icon'] = MEDIA_ROOT_PREFIX + user.icon.url  # 记住将ImageField对象转为url
     return render(request, 'main/mine.html', context=context)
 
 
@@ -131,9 +134,14 @@ def register(request):
         user.email = email
         user.password = password
         user.icon = icon
-
         user.save()
-
+        u_token = uuid.uuid4().hex
+        print(u_token)
+        cache.set(u_token, username, timeout=60 * 60 * 24)
+        # 暂时还不成功，需要用到celery来在后台运行，或者因为是在windows平台
+        # p = Process(target=send_verification_email, args=(username, email, u_token))
+        # p.start()
+        send_verification_email(username, email, u_token)
         return HttpResponseRedirect(reverse('shop:login'))
 
 
@@ -142,6 +150,10 @@ def login(request):
         context = {
             'title': '登录',
         }
+        login_error = request.session.get('login_error')
+        if login_error:
+            del request.session['login_error']
+            context['login_error']=login_error
         return render(request, 'user/login.html', context=context)
     elif request.method == 'POST':
         username = request.POST.get('username')
@@ -150,13 +162,17 @@ def login(request):
         if users.exists():
             user = users.first()
             if my_password_checker(password, user.password):
-                request.session['username'] = username
-                return HttpResponseRedirect(reverse('shop:mine'))
+                if user.is_active:
+                    request.session['username'] = username
+                    return HttpResponseRedirect(reverse('shop:mine'))
+                else:
+                    request.session['login_error']='**用户未激活**'
+                    return HttpResponseRedirect(reverse('shop:login'))
             else:
-                print('密码错误')
+                request.session['login_error']='**密码错误**'
                 return HttpResponseRedirect(reverse('shop:login'))
         else:
-            print('没找到这个用户')
+            request.session['login_error']='**用户不存在**'
             return HttpResponseRedirect(reverse('shop:login'))
 
 
@@ -195,3 +211,20 @@ def checkemail(request):
 def logout(request):
     request.session.flush()
     return HttpResponseRedirect(reverse('shop:mine'))
+
+
+def activate(request):
+    u_token = request.GET.get('u_token')
+    username = cache.get(u_token)
+    if username:
+        user = User.objects.get(username=username)
+        user.is_active = True
+        user.save()
+        return HttpResponseRedirect(reverse('shop:login'))
+    else:
+        return HttpResponse('激活失败！')
+
+
+def testchche(request):
+    cache.set('name', 'xiaofu')
+    return HttpResponse('测试成功')

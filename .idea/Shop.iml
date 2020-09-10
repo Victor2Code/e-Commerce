@@ -14,7 +14,7 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="JS" />
     <orderEntry type="module" module-name="ITcast" />
@@ -24,6 +24,7 @@
     <orderEntry type="module" module-name="JD" />
     <orderEntry type="module" module-name="webcrawler" />
     <orderEntry type="module" module-name="KMP" />
+    <orderEntry type="module" module-name="untitled2" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

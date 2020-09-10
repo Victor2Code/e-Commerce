@@ -88,6 +88,17 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://10.18.99.66:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "xiaofu"
+        }
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -137,3 +148,11 @@ INTERNAL_IPS = [
     '127.0.0.1',
     'localhost',
 ]
+
+# 用于邮件发送
+EMAIL_HOST = 'smtp.126.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'fhx0704@126.com'
+EMAIL_HOST_PASSWORD = 'CAHBDXAXJRRHJWHR' # 授权码，不是密码
+SERVER_HOST = '127.0.0.1'
+SERVER_PORT = '8000'

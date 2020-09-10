@@ -18,4 +18,6 @@ urlpatterns = [
     path('checkuser/', views.checkuser, name='checkuser'),
     path('checkemail/', views.checkemail, name='checkemail'),
     path('logout/', views.logout, name='logout'),
+    path('activate/', views.activate, name='activate'),
+    path('testcache/',views.testchche),
 ]
