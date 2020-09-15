@@ -236,6 +236,7 @@ li > section > span {
     line-height: 0.4rem;
 }
 
+/* 数量增加及减少两个按钮 */
 .subShopping, .addShopping {
     font-size: 0.4rem;
     font-weight: 100;

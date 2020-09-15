@@ -54,9 +54,17 @@
                                 </div>
                             </a>
                             <section>
-                                <button>-</button>
+                                <button goodsid={{ goods.productid }} class="delete_from_cart">-</button>
+                                {% if goods in cart_goodsid %}
+                                    {% for key,value in cart_goodsid.items %}
+                                        {% ifequal key goods %}
+                                        <span>{{ value }}</span>
+                                        {% endifequal %}
+                                    {% endfor %}
+                                {% else %}
                                 <span>0</span>
-                                <button>+</button>
+                                {% endif %}
+                                <button goodsid={{ goods.productid }} class="add_to_cart">+</button>
                             </section>
                         </li>
                     {% endfor %}

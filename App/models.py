@@ -76,3 +76,12 @@ class User(models.Model):
 
     class Meta:
         db_table = 'User'
+
+
+class Cart(models.Model):
+    c_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    c_good = models.ForeignKey(Goods, on_delete=models.CASCADE)
+    c_goods_num = models.IntegerField(default=1)
+    c_is_selected = models.BooleanField(default=True)  # 加到车里面默认选中
+    class Meta:
+        db_table = 'Cart'

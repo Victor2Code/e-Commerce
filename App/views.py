@@ -19,7 +19,7 @@ from multiprocessing import Process
 #     return render(request, 'test.html', context=context)
 from django.urls import reverse
 
-from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User
+from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User, Cart
 from App.tools import my_password_generator, my_password_checker, send_verification_email
 from Shop.settings import MEDIA_ROOT_PREFIX
 
@@ -42,6 +42,14 @@ def market(request):
     childclass = request.GET.get('childclass', '0')
     sortrule = request.GET.get('sortrule', '1')
     goodtypes = GoodType.objects.all()
+    user = request.user
+
+    ### 获取用户购物车数据
+    carts = Cart.objects.filter(c_user=user)
+    cart_goodsid = {}
+    if carts.exists():
+        for cart in carts:
+            cart_goodsid[cart.c_good] = cart.c_goods_num
 
     ### 子类过滤
     # filter永远返回一个QuerySet，需要索引获取单条记录
@@ -82,6 +90,7 @@ def market(request):
         'childcid': childclass,
         'rules': rules,
         'sortrule': sortrule,
+        'cart_goodsid': cart_goodsid,
     }
     return render(request, 'main/market.html', context=context)
 
@@ -153,7 +162,7 @@ def login(request):
         login_error = request.session.get('login_error')
         if login_error:
             del request.session['login_error']
-            context['login_error']=login_error
+            context['login_error'] = login_error
         return render(request, 'user/login.html', context=context)
     elif request.method == 'POST':
         username = request.POST.get('username')
@@ -166,13 +175,13 @@ def login(request):
                     request.session['username'] = username
                     return HttpResponseRedirect(reverse('shop:mine'))
                 else:
-                    request.session['login_error']='**用户未激活**'
+                    request.session['login_error'] = '**用户未激活**'
                     return HttpResponseRedirect(reverse('shop:login'))
             else:
-                request.session['login_error']='**密码错误**'
+                request.session['login_error'] = '**密码错误**'
                 return HttpResponseRedirect(reverse('shop:login'))
         else:
-            request.session['login_error']='**用户不存在**'
+            request.session['login_error'] = '**用户不存在**'
             return HttpResponseRedirect(reverse('shop:login'))
 
 
@@ -228,3 +237,44 @@ def activate(request):
 def testchche(request):
     cache.set('name', 'xiaofu')
     return HttpResponse('测试成功')
+
+
+def add_to_cart(request):
+    goodsid = request.GET.get('goodsid')
+    user = request.user
+    carts = Cart.objects.filter(c_good__productid=goodsid).filter(c_user=user)
+    data = {
+        'status': 700,
+        'num': 1,
+    }
+    if carts.exists():
+        cart = carts.first()
+        cart.c_goods_num = cart.c_goods_num + 1
+        cart.save()
+        data['num'] = cart.c_goods_num
+    else:
+        cart = Cart()
+        cart.c_good = Goods.objects.get(productid=goodsid)
+        cart.c_user = user
+        cart.save()
+
+    return JsonResponse(data)
+
+
+def delete_from_cart(request):
+    goodsid = request.GET.get('goodsid')
+    user = request.user
+    carts = Cart.objects.filter(c_good__productid=goodsid).filter(c_user=user)
+    data = {
+        'status': 700,
+    }
+    if carts.exists():
+        cart = carts.first()
+        cart.c_goods_num = cart.c_goods_num - 1
+        if cart.c_goods_num < 0:
+            cart.c_goods_num = 0
+        cart.save()
+        data['num'] = cart.c_goods_num
+    else:
+        data['num'] = 0
+    return JsonResponse(data)

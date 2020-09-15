@@ -19,5 +19,6 @@ urlpatterns = [
     path('checkemail/', views.checkemail, name='checkemail'),
     path('logout/', views.logout, name='logout'),
     path('activate/', views.activate, name='activate'),
-    path('testcache/',views.testchche),
+    path('add_to_cart/', views.add_to_cart, name='add_to_cart'),
+    path('delete_from_cart/', views.delete_from_cart, name='delete_from_cart'),
 ]

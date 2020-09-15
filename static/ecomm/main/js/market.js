@@ -31,4 +31,28 @@ $(function(){
     $('#sort_methods_container').click(function(){
         sortToggle();
     });
+    $('.add_to_cart').click(function(){
+        let goodsid = $(this).attr('goodsid');
+        let $add = $(this)
+        $.get('/shop/add_to_cart/',{'goodsid':goodsid},function(data){
+            // 这里不能用$(this)，会指向当前的ajax请求，需要在上层先获取点击事件的对象
+            if (data['status']==700){
+                $add.prev().html(data['num']);
+            }else if(data['status']==701){
+                window.open('/shop/login/', target='_self');
+            };
+        });
+    });
+    $('.delete_from_cart').click(function(){
+        let goodsid = $(this).attr('goodsid');
+        let $delete = $(this);
+        $.get('/shop/delete_from_cart/',{'goodsid':goodsid},function(data){
+            // 这里不能用$(this)，会指向当前的ajax请求，需要在上层先获取点击事件的对象
+            if (data['status']==700){
+                $delete.next().html(data['num']);
+            }else if(data['status']==701){
+                window.open('/shop/login/', target='_self');
+            };
+        });
+    });
 })
