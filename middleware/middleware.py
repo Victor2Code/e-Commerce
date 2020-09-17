@@ -14,6 +14,9 @@ class loginMiddleware(MiddlewareMixin):
         paths_for_json = [
             '/shop/add_to_cart/',
             '/shop/delete_from_cart/',
+            '/shop/change_select_state/',
+            '/shop/cart_all_unselect/',
+            '/shop/cart_all_select/',
         ]
         paths_for_html = [
             '/shop/market/',

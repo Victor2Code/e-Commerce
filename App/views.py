@@ -18,6 +18,7 @@ from multiprocessing import Process
 #     }
 #     return render(request, 'test.html', context=context)
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User, Cart
 from App.tools import my_password_generator, my_password_checker, send_verification_email
@@ -96,7 +97,15 @@ def market(request):
 
 
 def cart(request):
-    return render(request, 'main/cart.html')
+    user = request.user
+    carts = Cart.objects.filter(c_user=user)
+    is_all_select = not carts.filter(c_is_selected=False).exists()
+    context = {
+        'title': '购物车',
+        'carts': carts,
+        'is_all_select': is_all_select,
+    }
+    return render(request, 'main/cart.html', context=context)
 
 
 def mine(request):
@@ -277,4 +286,83 @@ def delete_from_cart(request):
         data['num'] = cart.c_goods_num
     else:
         data['num'] = 0
+    return JsonResponse(data)
+
+
+def change_select_state(request):
+    cartid = request.GET.get('cartid')
+    carts = Cart.objects.filter(pk=cartid)
+    user = request.user
+    data = {
+        'status': 700,
+    }
+    if carts.exists():
+        cart = carts.first()
+        cart.c_is_selected = not cart.c_is_selected
+        cart.save()
+        data['is_selected'] = cart.c_is_selected
+        is_all_select = not Cart.objects.filter(c_user=user).filter(c_is_selected=False).exists()
+        data['is_all_select'] = is_all_select
+    return JsonResponse(data)
+
+
+def delete_in_cart(request):
+    cartid = request.GET.get('cartid')
+    cart = Cart.objects.get(pk=cartid)
+    data = {
+        'status': 700,
+    }
+    if cart.c_goods_num > 1:
+        cart.c_goods_num = cart.c_goods_num - 1
+        cart.save()
+        data['num'] = cart.c_goods_num
+    else:
+        cart.delete()
+        data['num'] = 0
+    return JsonResponse(data)
+
+
+def add_in_cart(request):
+    cartid = request.GET.get('cartid')
+    cart = Cart.objects.get(pk=cartid)
+    cart.c_goods_num = cart.c_goods_num + 1
+    cart.save()
+    data = {
+        'status': 700,
+        'num': cart.c_goods_num,
+    }
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def testlist(request):
+    names = request.POST.get('method')
+    print(request.POST)
+    print(names)
+    return HttpResponse('ok')
+
+
+def cart_all_unselect(request):
+    user = request.user
+    carts = Cart.objects.filter(c_user=user)
+    data = {
+        'status': 700,
+    }
+    if carts.exists():
+        for cart in carts:
+            cart.c_is_selected = False
+            cart.save()
+    return JsonResponse(data)
+
+
+def cart_all_select(request):
+    user = request.user
+    carts = Cart.objects.filter(c_user=user)
+    data = {
+        'status': 700,
+    }
+    if carts.exists():
+        for cart in carts:
+            cart.c_is_selected = True
+            cart.save()
     return JsonResponse(data)
