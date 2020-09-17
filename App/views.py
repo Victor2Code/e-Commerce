@@ -21,7 +21,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User, Cart
-from App.tools import my_password_generator, my_password_checker, send_verification_email
+from App.tools import my_password_generator, my_password_checker, send_verification_email, total_price
 from Shop.settings import MEDIA_ROOT_PREFIX
 
 
@@ -104,6 +104,7 @@ def cart(request):
         'title': '购物车',
         'carts': carts,
         'is_all_select': is_all_select,
+        'total_price': total_price(user),
     }
     return render(request, 'main/cart.html', context=context)
 
@@ -303,12 +304,14 @@ def change_select_state(request):
         data['is_selected'] = cart.c_is_selected
         is_all_select = not Cart.objects.filter(c_user=user).filter(c_is_selected=False).exists()
         data['is_all_select'] = is_all_select
+        data['total_price']=total_price(user)
     return JsonResponse(data)
 
 
 def delete_in_cart(request):
     cartid = request.GET.get('cartid')
     cart = Cart.objects.get(pk=cartid)
+    user=request.user
     data = {
         'status': 700,
     }
@@ -319,17 +322,20 @@ def delete_in_cart(request):
     else:
         cart.delete()
         data['num'] = 0
+    data['total_price']=total_price(user)
     return JsonResponse(data)
 
 
 def add_in_cart(request):
     cartid = request.GET.get('cartid')
+    user=request.user
     cart = Cart.objects.get(pk=cartid)
     cart.c_goods_num = cart.c_goods_num + 1
     cart.save()
     data = {
         'status': 700,
         'num': cart.c_goods_num,
+        'total_price':total_price(user),
     }
     return JsonResponse(data)
 

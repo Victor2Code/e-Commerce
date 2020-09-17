@@ -5,10 +5,12 @@
 import base64
 import hashlib
 import time
+from decimal import Decimal
 
 from django.core.mail import send_mail
 from django.template import loader
 
+from App.models import Cart
 from Shop.settings import SERVER_HOST, SERVER_PORT
 
 
@@ -39,3 +41,15 @@ def send_verification_email(recipient, email, u_token):
     html_message = loader.get_template('user/verify.html').render(data)
     recipient_list = [email, ]
     send_mail(subject, message, from_email, recipient_list, html_message=html_message)
+
+
+def total_price(user):
+    carts = Cart.objects.filter(c_user=user).filter(c_is_selected=True)
+    if carts.exists():
+        total = 0
+        for cart in carts:
+            # total += cart.c_goods_num * Decimal(str(cart.c_good.price))
+            total += cart.c_goods_num * cart.c_good.price
+        return round(total, 1)
+    else:
+        return 0

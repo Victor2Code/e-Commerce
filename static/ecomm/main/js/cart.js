@@ -16,6 +16,7 @@ $(function () {
             } else {
                 $span.html('');
             }
+            $('#total_price').html(data['total_price']);
         })
     });
     $('.delete_in_cart').click(function () {
@@ -28,14 +29,16 @@ $(function () {
             } else {
                 $span.html(data['num']);
             }
+            $('#total_price').html(data['total_price']);
         });
     });
     $('.add_in_cart').click(function () {
         let cartid = $(this).parents('.menuList').attr('cartid');
         let $span = $(this).prev();
         $.get('/shop/add_in_cart/', {'cartid': cartid}, function (data) {
-            // console.log(data);
+            console.log(data);
             $span.html(data['num']);
+            $('#total_price').html(data['total_price']);
         });
     });
     $('.all_select').click(function () {

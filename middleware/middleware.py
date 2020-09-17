@@ -17,6 +17,8 @@ class loginMiddleware(MiddlewareMixin):
             '/shop/change_select_state/',
             '/shop/cart_all_unselect/',
             '/shop/cart_all_select/',
+            '/shop/delete_in_cart/',
+            '/shop/add_in_cart/',
         ]
         paths_for_html = [
             '/shop/market/',
