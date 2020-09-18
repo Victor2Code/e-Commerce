@@ -65,5 +65,24 @@ $(function () {
                 }
             })
         }
+    });
+    $('#make_order').click(function () {
+        let selected = []
+        $('.confirm').each(function () {
+            let $confirm = $(this);
+            let value = $(this).children('span').children('span').html().trim();
+            if (value){
+                let cartid = $confirm.parents('li').attr('cardid');
+                selected.push(cartid);
+            }
+        });
+        if(selected.length>0){
+            $.get('/shop/make_order/',{},function (data) {
+                console.log(data);
+                window.open('/shop/orderdetails/?order_id='+data['order_id'],target='_self');
+            })
+        }else{
+            alert('请至少选择一件商品')
+        }
     })
 });

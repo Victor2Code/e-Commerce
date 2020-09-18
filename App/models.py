@@ -6,6 +6,8 @@ from django.db import models
 # class Test(models.Model):
 #     name = models.CharField(max_length=16)
 #     location = models.CharField(max_length=255)
+from App.constants import ORDER_NOT_PAID
+
 
 class Main(models.Model):
     img = models.CharField(max_length=255)  # 图片地址
@@ -85,3 +87,19 @@ class Cart(models.Model):
     c_is_selected = models.BooleanField(default=True)  # 加到车里面默认选中
     class Meta:
         db_table = 'Cart'
+
+
+class Order(models.Model):
+    o_user = models.ForeignKey(User,on_delete=models.CASCADE)
+    o_price = models.FloatField(default=0)
+    o_time = models.DateTimeField(auto_now=True)
+    o_status = models.IntegerField(default=ORDER_NOT_PAID)
+    class Meta:
+        db_table = 'Order'
+
+class OrderGoods(models.Model):
+    o_order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    o_goods = models.ForeignKey(Goods,on_delete=models.CASCADE)  # 也可以用复制的方式保留历史信息，这里直接用外键
+    o_goods_num = models.IntegerField(default=1)
+    class Meta:
+        db_table = 'OrderGoods'

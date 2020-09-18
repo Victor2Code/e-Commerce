@@ -19,10 +19,12 @@ class loginMiddleware(MiddlewareMixin):
             '/shop/cart_all_select/',
             '/shop/delete_in_cart/',
             '/shop/add_in_cart/',
+            '/shop/make_order/',
         ]
         paths_for_html = [
             '/shop/market/',
             '/shop/cart/',
+            '/shop/orderdetails/',
         ]
         if request.path in paths_for_json:
             username = request.session.get('username')

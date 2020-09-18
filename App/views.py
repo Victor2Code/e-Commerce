@@ -20,7 +20,7 @@ from multiprocessing import Process
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User, Cart
+from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User, Cart, Order, OrderGoods
 from App.tools import my_password_generator, my_password_checker, send_verification_email, total_price
 from Shop.settings import MEDIA_ROOT_PREFIX
 
@@ -372,3 +372,37 @@ def cart_all_select(request):
             cart.c_is_selected = True
             cart.save()
     return JsonResponse(data)
+
+
+def make_order(request):
+    user = request.user
+    carts = Cart.objects.filter(c_user=user).filter(c_is_selected=True)
+    # 生成订单
+    order = Order()
+    order.o_user=user
+    order.o_price=total_price(user)
+    order.save()
+    # 订单和商品级联
+    for cart in carts:
+        ordergoods = OrderGoods()
+        ordergoods.o_order=order
+        ordergoods.o_goods = cart.c_good
+        ordergoods.o_goods_num = cart.c_goods_num
+        ordergoods.save()
+        cart.delete()
+    data = {
+        'status': 700,
+        'msg': 'ok',
+        'order_id': order.id,
+    }
+    return JsonResponse(data)
+
+
+def orderdetails(request):
+    orderid=request.GET.get('order_id')
+    order = Order.objects.get(pk=orderid)
+    context={
+        'title': '订单详情',
+        'order': order,
+    }
+    return render(request,'order/order_detail.html',context=context)
