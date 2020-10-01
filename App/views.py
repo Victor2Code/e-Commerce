@@ -120,6 +120,8 @@ def mine(request):
         context['is_login'] = True
         context['username'] = user.username
         context['icon'] = MEDIA_ROOT_PREFIX + user.icon.url  # 记住将ImageField对象转为url
+        context['order_not_pay_count'] = Order.objects.filter(o_user=user).filter(o_status=0).count()
+        context['order_not_received_count'] = Order.objects.filter(o_user=user).filter(o_status=1).count()
     return render(request, 'main/mine.html', context=context)
 
 
@@ -169,7 +171,7 @@ def login(request):
         context = {
             'title': '登录',
         }
-        login_error = request.session.get('login_error')
+        login_error = request.session.get('login_error')  # 利用session存储临时前后端交互内容
         if login_error:
             del request.session['login_error']
             context['login_error'] = login_error
@@ -304,14 +306,14 @@ def change_select_state(request):
         data['is_selected'] = cart.c_is_selected
         is_all_select = not Cart.objects.filter(c_user=user).filter(c_is_selected=False).exists()
         data['is_all_select'] = is_all_select
-        data['total_price']=total_price(user)
+        data['total_price'] = total_price(user)
     return JsonResponse(data)
 
 
 def delete_in_cart(request):
     cartid = request.GET.get('cartid')
     cart = Cart.objects.get(pk=cartid)
-    user=request.user
+    user = request.user
     data = {
         'status': 700,
     }
@@ -322,20 +324,20 @@ def delete_in_cart(request):
     else:
         cart.delete()
         data['num'] = 0
-    data['total_price']=total_price(user)
+    data['total_price'] = total_price(user)
     return JsonResponse(data)
 
 
 def add_in_cart(request):
     cartid = request.GET.get('cartid')
-    user=request.user
+    user = request.user
     cart = Cart.objects.get(pk=cartid)
     cart.c_goods_num = cart.c_goods_num + 1
     cart.save()
     data = {
         'status': 700,
         'num': cart.c_goods_num,
-        'total_price':total_price(user),
+        'total_price': total_price(user),
     }
     return JsonResponse(data)
 
@@ -379,13 +381,13 @@ def make_order(request):
     carts = Cart.objects.filter(c_user=user).filter(c_is_selected=True)
     # 生成订单
     order = Order()
-    order.o_user=user
-    order.o_price=total_price(user)
+    order.o_user = user
+    order.o_price = total_price(user)
     order.save()
     # 订单和商品级联
     for cart in carts:
         ordergoods = OrderGoods()
-        ordergoods.o_order=order
+        ordergoods.o_order = order
         ordergoods.o_goods = cart.c_good
         ordergoods.o_goods_num = cart.c_goods_num
         ordergoods.save()
@@ -399,10 +401,30 @@ def make_order(request):
 
 
 def orderdetails(request):
-    orderid=request.GET.get('order_id')
+    orderid = request.GET.get('order_id')
     order = Order.objects.get(pk=orderid)
-    context={
+    context = {
         'title': '订单详情',
         'order': order,
     }
-    return render(request,'order/order_detail.html',context=context)
+    return render(request, 'order/order_detail.html', context=context)
+
+
+def orderlist_not_pay(request):
+    orders = Order.objects.filter(o_user=request.user).filter(o_status=0)
+    context = {
+        'title': '未付款订单',
+        'orders': orders,
+    }
+    return render(request, 'order/orderlist_not_pay.html', context=context)
+
+
+def paid(request):
+    orderid = request.GET.get('order_id')
+    order = Order.objects.get(pk=orderid)
+    order.o_status=1
+    order.save()
+    data={
+        'status':700,
+    }
+    return JsonResponse(data)

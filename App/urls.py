@@ -29,4 +29,6 @@ urlpatterns = [
     path('cart_all_select/', views.cart_all_select, name='cart_all_select'),
     path('make_order/', views.make_order, name='make_order'),
     path('orderdetails/', views.orderdetails, name='orderdetails'),
+    path('orderlist_not_pay/',views.orderlist_not_pay,name='orderlist_not_pay'),
+    path('paid/',views.paid,name='paid'),
 ]

@@ -42,13 +42,19 @@
             </p>
             <nav id="nav">
                 <ul>
-                    <li>
+                    <li id="order_not_pay">
+                        {% ifnotequal order_not_pay_count 0 %}
+                        <span class="badge">{{ order_not_pay_count }}</span>
+                        {% endifnotequal %}
                         <dl>
                             <dt><span class="glyphicon glyphicon-usd"></span></dt>
                             <dd>待付款</dd>
                         </dl>
                     </li>
                     <li>
+                        {% ifnotequal order_not_received_count 0 %}
+                        <span class="badge">{{ order_not_received_count }}</span>
+                        {% endifnotequal %}
                         <dl>
                             <dt><span class="glyphicon glyphicon-envelope"></span></dt>
                             <dd>待收货</dd>

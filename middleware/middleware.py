@@ -25,6 +25,8 @@ class loginMiddleware(MiddlewareMixin):
             '/shop/market/',
             '/shop/cart/',
             '/shop/orderdetails/',
+            '/shop/mine/',
+            '/shop/orderlist_not_pay/',
         ]
         if request.path in paths_for_json:
             username = request.session.get('username')

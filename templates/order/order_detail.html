@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="{% static 'ecomm/order/css/order_detail.css' %}">
 {% endblock %}
 
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'ecomm/order/js/order_detail.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <div id="order_detail" class="container">
         <h6>订单编号：{{ order.id }}</h6>
