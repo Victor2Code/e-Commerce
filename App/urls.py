@@ -29,6 +29,7 @@ urlpatterns = [
     path('cart_all_select/', views.cart_all_select, name='cart_all_select'),
     path('make_order/', views.make_order, name='make_order'),
     path('orderdetails/', views.orderdetails, name='orderdetails'),
-    path('orderlist_not_pay/',views.orderlist_not_pay,name='orderlist_not_pay'),
-    path('paid/',views.paid,name='paid'),
+    path('orderlist_not_pay/', views.orderlist_not_pay, name='orderlist_not_pay'),
+    path('paid/', views.paid, name='paid'),  # 一个假的支付接口
+    path('alipay/', views.alipay, name='alipay'),  # 支付宝沙盒的测试接口
 ]

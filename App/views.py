@@ -1,10 +1,13 @@
+import os
 import random
+import traceback
 import uuid
 
+from alipay import AliPayConfig, AliPay
 from django.core.cache import cache, caches
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from multiprocessing import Process
 
 # Create your views here.
@@ -22,7 +25,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from App.models import MainSwiper, MainNav, MainMustBuy, GoodType, Goods, User, Cart, Order, OrderGoods
 from App.tools import my_password_generator, my_password_checker, send_verification_email, total_price
-from Shop.settings import MEDIA_ROOT_PREFIX
+from Shop.settings import MEDIA_ROOT_PREFIX, BASE_DIR
 
 
 def home(request):
@@ -422,9 +425,34 @@ def orderlist_not_pay(request):
 def paid(request):
     orderid = request.GET.get('order_id')
     order = Order.objects.get(pk=orderid)
-    order.o_status=1
+    order.o_status = 1
     order.save()
-    data={
-        'status':700,
+    data = {
+        'status': 700,
     }
     return JsonResponse(data)
+
+
+def alipay(request):
+    alipay = AliPay(
+        appid="2016102500758026",
+        app_notify_url=None,  # 默认回调url
+        app_private_key_string=open(os.path.join(BASE_DIR, 'alipay_keys/app_private_key'), 'r').read(),
+        # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+        alipay_public_key_string=open(os.path.join(BASE_DIR, 'alipay_keys/alipay_public_key'), 'r').read(),
+        sign_type="RSA",  # RSA 或者 RSA2
+        debug=False,  # 默认False
+        config=AliPayConfig(timeout=15)  # 可选, 请求超时时间
+    )
+
+    subject = '特斯拉Model3'
+
+    order_string = alipay.api_alipay_trade_page_pay(
+        out_trade_no="20201002001",
+        total_amount=10000,
+        subject=subject,
+        return_url="https://www.baidu.com",
+        notify_url="https://www.baidu.com",  # 可选, 不填则使用默认notify url
+    )
+
+    return redirect('https://openapi.alipaydev.com/gateway.do?' + order_string)
